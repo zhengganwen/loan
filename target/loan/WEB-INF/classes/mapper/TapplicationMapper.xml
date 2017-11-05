@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.loan.dao.TapplicationDao">
+  <sql id="column"> id,userid,money,getdate,userfor,type,state,returnmoney,intime,modtime</sql>
+
+
+
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Tapplication">
+    insert into tapplication (
+    <trim suffixOverrides=",">
+      <if test="id != null and id != ''">id,</if>
+      <if test="userid != null and userid != ''">userid,</if>
+      <if test="money != null and money != ''">money,</if>
+      <if test="getdate != null and money != ''">getdate,</if>
+      <if test="userfor != null and userfor != ''">userfor,</if>
+      <if test="type != null and type != ''">type,</if>
+      <if test="state != null and state != ''">state,</if>
+      <if test="returnmoney != null and returnmoney != ''">returnmoney,</if>
+      <if test="intime != null and intime != ''">intime,</if>
+      <if test="modtime != null and modtime != ''">modtime,</if>
+
+    </trim>
+    ) values (
+    <trim suffixOverrides=",">
+      <if test="id != null and id != ''">#{id},</if>
+      <if test="userid != null and userid != ''">#{userid},</if>
+      <if test="money != null and money != ''">#{money},</if>
+      <if test="getdate != null and getdate != ''">#{getdate},</if>
+      <if test="userfor != null and userfor != ''">#{userfor},</if>
+      <if test="type != null and type != ''">#{type},</if>
+      <if test="state != null and state != ''">#{state},</if>
+      <if test="returnmoney != null and returnmoney != ''">#{returnmoney},</if>
+      <if test="intime != null and intime != ''">#{intime},</if>
+      <if test="modtime != null and modtime != ''">#{modtime},</if>
+    </trim>
+    )
+  </insert>
+
+  <update id="update" parameterType="Tapplication">
+    update tapplication
+    <trim prefix=" set " suffixOverrides=",">
+      <if test="id != null and id != ''">id=#{id},</if>
+      <if test="userid != null and userid != ''">userid=#{userid},</if>
+      <if test="money != null and money != ''">money=#{money},</if>
+      <if test="getdate != null and getdate != ''">getdate=#{getdate},</if>
+      <if test="userfor != null and userfor != ''">userfor=#{userfor},</if>
+      <if test="type != null and type != ''">type=#{type},</if>
+      <if test="state != null and state != ''">state=#{state},</if>
+      <if test="returnmoney != null and returnmoney != ''">returnmoney=#{returnmoney},</if>
+      <if test="intime != null and intime != ''">intime=#{intime},</if>
+      <if test="modtime != null and modtime != ''">modtime=#{modtime},</if>
+
+    </trim>
+    where id=#{id}
+  </update>
+
+
+  <select id="countByPage" parameterType="Tapplication"   resultType="int"    >
+    select count(*)  from tapplication
+    <where>
+      <if test="id != null and id != ''">and id=#{id}</if>
+      <if test="userid != null and userid != ''">and userid=#{userid}</if>
+      <if test="money != null and money != ''">and money=#{money}</if>
+      <if test="getdate != null and getdate != ''">and getdate=#{getdate}</if>
+      <if test="userfor != null and userfor != ''">and userfor=#{userfor}</if>
+      <if test="type != null and type != ''">and type=#{type}</if>
+      <if test="state != null and state != ''">and state=#{state}</if>
+      <if test="returnmoney != null and returnmoney != ''">and returnmoney=#{returnmoney}</if>
+      <if test="intime != null and intime != ''">and intime=#{intime}</if>
+      <if test="modtime != null and modtime != ''">and modtime=#{modtime}</if>
+    </where>
+  </select>
+
+  <resultMap type="Tapplication" id="Application_user_result" autoMapping="true">
+    <id column="id" property="id" jdbcType="CHAR" />
+    <association property="user" javaType="User" autoMapping="true">
+      <id column="userid" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+  </resultMap>
+  <select id="findApplicationByPage" parameterType="com.study.loan.core.PageBean"  resultMap="Application_user_result"   >
+
+    select t.id,t.userid,t.money,t.getdate,t.userfor,t.type,t.state,t.returnmoney,t.intime,t.modtime,
+    u.id as uid,u.username,u.userphone FROM  tapplication t  left join user u on  t.userid = u.id
+    LIMIT #{offSet}, #{pageSize}
+  </select>
+
+
+</mapper>

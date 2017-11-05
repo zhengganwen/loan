@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.loan.dao.TcodeDao">
+ <sql id="column">id,userphone,vercode,intime </sql>
+    <resultMap id="BaseResultMap" type="com.study.loan.pojo.Tcode">
+        <id column="id" jdbcType="CHAR" property="id" />
+        <result column="userphone" jdbcType="CHAR" property="userphone" />
+        <result column="vercode" jdbcType="VARCHAR" property="vercode" />
+        <result column="intime" jdbcType="TIMESTAMP" property="intime" />
+    </resultMap>
+   <select id="findTcode" parameterType="com.study.loan.pojo.Tcode"  resultMap="BaseResultMap" >
+    SELECT <include refid="column"/> FROM  tcode
+    where userphone = #{userphone} and  vercode = #{vercode}
+  </select>
+
+    <!-- 插入 -->
+    <insert id="insert" parameterType="Tcode">
+        insert into tcode (
+        <trim suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="userphone != null and userphone != ''">userphone,</if>
+            <if test="vercode != null and vercode != ''">vercode,</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="userphone != null and userphone != ''">#{userphone},</if>
+            <if test="vercode != null and vercode != ''">#{vercode},</if>
+        </trim>
+        )
+    </insert>
+
+</mapper>

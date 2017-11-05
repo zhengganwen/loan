@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.loan.dao.UserDao">
+  <sql id="column"> id,username,userphone,usercardnumber,frontpicture,backpicture,truepicture,state,intime,modtime</sql>
+
+  <select id="findUser" parameterType="User"  resultType="User" >
+
+    SELECT  <include refid="column"/>
+    FROM  USER
+    where userphone = #{userphone} and  userpwd = #{userpwd}
+  </select>
+
+  <!-- 插入 -->
+  <insert id="insert" parameterType="User">
+    insert into user (
+    <trim suffixOverrides=",">
+      <if test="id != null and id != ''">id,</if>
+      <if test="userphone != null and userphone != ''">userphone,</if>
+      <if test="userpwd != null and userpwd != ''">userpwd,</if>
+
+    </trim>
+    ) values (
+    <trim suffixOverrides=",">
+      <if test="id != null and id != ''">#{id},</if>
+      <if test="userphone != null and userphone != ''">#{userphone},</if>
+      <if test="userpwd != null and userpwd != ''">#{userpwd},</if>
+    </trim>
+    )
+  </insert>
+
+  <select id="find" resultType="User" parameterType="User">
+    select <include refid="column"/>  from USER
+    <where>
+      <if test=" id!= null &amp;&amp;  id!= ''"> and id=#{id}</if>
+      <if test="userphone != null &amp;&amp; userphone != ''"> and userphone=#{userphone}</if>
+      <if test="username != null &amp;&amp; username != ''"> and username=#{username}</if>
+    </where>
+  </select>
+
+  <update id="update" parameterType="User">
+    update USER
+    <trim prefix=" set " suffixOverrides=",">
+      <if test="id != null and id != ''">id=#{id},</if>
+      <if test="username != null and username != ''">username=#{username},</if>
+      <if test="userphone != null and userphone != ''">userphone=#{userphone},</if>
+      <if test="userpwd != null and userpwd != ''">userpwd=#{userpwd},</if>
+      <if test="usercardnumber != null and usercardnumber != ''">usercardnumber=#{usercardnumber},</if>
+      <if test="frontpicture != null and frontpicture != ''">frontpicture=#{frontpicture},</if>
+      <if test="backpicture != null and backpicture != ''">backpicture=#{backpicture},</if>
+      <if test="truepicture != null and truepicture != ''">truepicture=#{truepicture},</if>
+      <if test="state != null and state != ''">state=#{state},</if>
+      <if test="modtime != null and modtime != ''">modtime=#{modtime},</if>
+
+    </trim>
+    where id=#{id}
+  </update>
+
+  <select id="findUserByPage" parameterType="com.study.loan.core.PageBean"  resultType="User"   >
+
+    SELECT <include refid="column" /> FROM  USER
+    <where>
+      <if test="param.username != null and param.username != ''">and username like "%"#{param.username}"%"</if>
+      <if test="param.userphone != null and param.userphone != ''">and userphone=#{param.userphone}</if>
+    </where>
+    LIMIT #{offSet}, #{pageSize}
+  </select>
+
+  <select id="countByPage" parameterType="User"   resultType="int"    >
+    select count(*)  from user
+    <where>
+      <if test="id != null and id != ''">and id=#{id}</if>
+      <if test="username != null and username != ''">and username like "%" #{username} "%"</if>
+      <if test="userphone != null and userphone != ''">and userphone=#{userphone}</if>
+      <if test="usercardnumber != null and usercardnumber != ''">and usercardnumber=#{usercardnumber}</if>
+      <if test="frontpicture != null and frontpicture != ''">and frontpicture=#{frontpicture}</if>
+      <if test="backpicture != null and backpicture != ''">and backpicture=#{backpicture}</if>
+      <if test="truepicture != null and truepicture != ''">and truepicture=#{truepicture}</if>
+      <if test="state != null and state != ''">and state=#{state}</if>
+      <if test="modtime != null and modtime != ''">and modtime=#{modtime}</if>
+    </where>
+  </select>
+
+</mapper>
