@@ -6,7 +6,7 @@
 
 
   <!-- 插入 -->
-  <insert id="insert" parameterType="Tapplication">
+  <insert id="insert" parameterType="com.study.loan.dto.ApplicationDto">
     insert into tapplication (
     <trim suffixOverrides=",">
       <if test="id != null and id != ''">id,</if>

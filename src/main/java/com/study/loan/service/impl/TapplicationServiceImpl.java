@@ -2,6 +2,7 @@ package com.study.loan.service.impl;
 
 import com.study.loan.core.PageBean;
 import com.study.loan.dao.TapplicationDao;
+import com.study.loan.dto.ApplicationDto;
 import com.study.loan.pojo.Tapplication;
 import com.study.loan.service.TapplicationService;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class TapplicationServiceImpl  implements TapplicationService {
 
     @Resource
     private TapplicationDao tapplicationDao;
-    public int insert(Tapplication tapplication) {
+    public int insert(ApplicationDto tapplication) {
         return tapplicationDao.insert(tapplication);
     }
     public int update(Tapplication tapplication) {
