@@ -8,19 +8,33 @@ import java.util.List;
  * @Date:2017.10.28
  */
 public class PageBean<T> {
-    //当前页
+    /**
+     * 当前页
+     */
     private Integer pageNum;
-    //页面记录数
+    /**
+     * 页面记录数
+     */
     private Integer pageSize;
-    //偏移量
+    /**
+     * 偏移量
+     */
     private Integer offSet;
-    //总页数
+    /**
+     * 总页数
+     */
     private Integer totalPage;
-    //总记录
+    /**
+     * 总记录数
+     */
     private Integer totalSize;
-    //存放数据集合
+    /**
+     * 存放数据集合
+     */
     private  List<T>  dataList;
-    //对象参数
+    /**
+     * 对象参数
+     */
     private T  param;
 
     public PageBean() {}
@@ -28,7 +42,8 @@ public class PageBean<T> {
     public PageBean(Integer pageNum,Integer pageSize) {
         this.pageNum = pageNum;
         this.pageSize=pageSize;
-        this.offSet=(pageNum-1)*pageSize;  //偏移量
+        //偏移量
+        this.offSet=(pageNum-1)*pageSize;
     }
 
     public Integer getPageNum() {
@@ -37,8 +52,10 @@ public class PageBean<T> {
 
     public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
-        if(pageSize !=null)
-            this.offSet=(pageNum-1)*pageSize;  //偏移量
+        if(pageSize !=null) {
+            //偏移量
+            this.offSet = (pageNum - 1) * pageSize;
+        }
     }
 
     public Integer getOffSet() {
@@ -55,8 +72,10 @@ public class PageBean<T> {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
-        if(pageNum!=null)
-        this.offSet=(pageNum-1)*pageSize;  //偏移量
+        if(pageNum!=null){
+            //偏移量
+            this.offSet = (pageNum - 1) * pageSize;
+        }
     }
 
     public Integer getTotalPage() {

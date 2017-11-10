@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * @Description
- * @Author:Mr.Zheng
- * @Date:2017.11.2
+ * @author Mr.Zheng
+ * @Description ContactController
+ * @Date 2017/9/18
  */
 @RestController
 @RequestMapping("/contact")

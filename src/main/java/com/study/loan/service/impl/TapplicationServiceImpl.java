@@ -21,15 +21,17 @@ public class TapplicationServiceImpl  implements TapplicationService {
 
     @Resource
     private TapplicationDao tapplicationDao;
+    @Override
     public int insert(ApplicationDto tapplication) {
         return tapplicationDao.insert(tapplication);
     }
+    @Override
     public int update(Tapplication tapplication) {
         return tapplicationDao.update(tapplication);
     }
-
-    public PageBean<Tapplication> findApplicationByPage(Tapplication tapplication, int pageSize, int pageNumber) {
-        Tapplication tapplicationParam = tapplication ==null ?new Tapplication():tapplication;
+    @Override
+    public PageBean<Tapplication> findApplicationByPage(ApplicationDto tapplication, int pageSize, int pageNumber) {
+        ApplicationDto tapplicationParam = tapplication ==null ?new ApplicationDto():tapplication;
         int countAplication = tapplicationDao.countByPage(tapplicationParam);
         PageBean pageBean = new PageBean(pageSize,pageNumber);
         pageBean.setParam(tapplicationParam);

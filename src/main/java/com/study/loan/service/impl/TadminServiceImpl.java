@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 public class TadminServiceImpl implements TadminService {
     @Resource
     private TadminDao tadminDao;
+
+    @Override
     public Tadmin finAdmin(Tadmin tadmin) {
         return tadminDao.finAdmin(tadmin);
     }

@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @Description
- * @Author:Mr.Zheng
+ * @author:Mr.Zheng
  * @Date:2017.10.30
  */
 @Repository
@@ -21,7 +21,6 @@ public interface TapplicationDao {
      * @return
      */
     int insert(ApplicationDto tapplication);
-
     /**
      * 更新借款申请
      * @param tapplication
@@ -38,5 +37,5 @@ public interface TapplicationDao {
     /**
      * 查询总记录数
      */
-    int countByPage(Tapplication tapplication);
+    int countByPage(ApplicationDto tapplication);
 }

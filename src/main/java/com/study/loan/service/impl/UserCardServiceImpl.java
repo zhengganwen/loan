@@ -17,6 +17,7 @@ public class UserCardServiceImpl implements UserCardService {
     @Resource
     private UserCardDao userCardDao;
 
+    @Override
     public int insert(Tusercard tusercard) {
         return userCardDao.insert(tusercard);
     }

@@ -69,7 +69,32 @@ public class ApplicationDto {
      */
     private Date modtime;
 
-    private User user;
+    /**
+     * 用户名
+     */
+    private String username;
 
+    /**
+     * 用户手机号
+     */
+    private String userphone;
 
+    @Override
+    public String toString() {
+        return "ApplicationDto{" +
+                "id='" + id + '\'' +
+                ", userid='" + userid + '\'' +
+                ", money=" + money +
+                ", getdate='" + getdate + '\'' +
+                ", userfor='" + userfor + '\'' +
+                ", type='" + type + '\'' +
+                ", state='" + state + '\'' +
+                ", returnmoney=" + returnmoney +
+                ", percent=" + percent +
+                ", intime=" + intime +
+                ", modtime=" + modtime +
+                ", username='" + username + '\'' +
+                ", userphone='" + userphone + '\'' +
+                '}';
+    }
 }

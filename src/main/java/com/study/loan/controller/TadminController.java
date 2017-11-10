@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 /**
  * @Description
- * @Author:Mr.Zheng
+ * @author:Mr.Zheng
  * @Date:2017/10/28
  */
 @Controller
@@ -26,7 +26,7 @@ public class TadminController {
 
     /**
      * 后台管理员登录
-     * @param tadmin
+     * @param  tadmin
      * @return
      */
     @RequestMapping(value = "/dologin",method= RequestMethod.POST)

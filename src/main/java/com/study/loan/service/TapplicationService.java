@@ -35,6 +35,6 @@ public interface TapplicationService {
      * @param pageNumber
      * @return
      */
-    PageBean<Tapplication> findApplicationByPage(Tapplication tapplication, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber);
+    PageBean<Tapplication> findApplicationByPage(ApplicationDto tapplication, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber);
 
 }

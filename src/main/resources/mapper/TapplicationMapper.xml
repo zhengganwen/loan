@@ -56,20 +56,15 @@
   </update>
 
 
-  <select id="countByPage" parameterType="Tapplication"   resultType="int"    >
-    select count(*)  from tapplication
+  <select id="countByPage" parameterType="com.study.loan.dto.ApplicationDto"   resultType="int"    >
+    select count(*)  from ( select t.id,t.userid,t.money,t.getdate,t.userfor,t.type,t.state,t.returnmoney,t.intime,t.modtime,
+    u.id as uid,u.username,u.userphone FROM  tapplication t  left join user u on  t.userid = u.id
     <where>
-      <if test="id != null and id != ''">and id=#{id}</if>
-      <if test="userid != null and userid != ''">and userid=#{userid}</if>
-      <if test="money != null and money != ''">and money=#{money}</if>
-      <if test="getdate != null and getdate != ''">and getdate=#{getdate}</if>
-      <if test="userfor != null and userfor != ''">and userfor=#{userfor}</if>
-      <if test="type != null and type != ''">and type=#{type}</if>
-      <if test="state != null and state != ''">and state=#{state}</if>
-      <if test="returnmoney != null and returnmoney != ''">and returnmoney=#{returnmoney}</if>
-      <if test="intime != null and intime != ''">and intime=#{intime}</if>
-      <if test="modtime != null and modtime != ''">and modtime=#{modtime}</if>
+      <if test="username != null and username != ''">and username like "%" #{username} "%"</if>
+      <if test="userphone != null and userphone != ''">and userphone like "%" #{userphone} "%"</if>
     </where>
+    ) tu
+
   </select>
 
   <resultMap type="Tapplication" id="Application_user_result" autoMapping="true">
@@ -83,6 +78,10 @@
 
     select t.id,t.userid,t.money,t.getdate,t.userfor,t.type,t.state,t.returnmoney,t.intime,t.modtime,
     u.id as uid,u.username,u.userphone FROM  tapplication t  left join user u on  t.userid = u.id
+    <where>
+      <if test="param.username != null and param.username != ''">and username like "%" #{param.username} "%"</if>
+      <if test="param.userphone != null and param.userphone != ''">and userphone like "%" #{param.userphone} "%"</if>
+    </where>
     LIMIT #{offSet}, #{pageSize}
   </select>
 

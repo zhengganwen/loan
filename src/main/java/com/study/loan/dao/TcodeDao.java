@@ -6,17 +6,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TcodeDao {
 
-
     /**
      *  手机验证码识别
      * @param tcode
-     * @return
+     * @return Tcode
      */
      Tcode findTcode(Tcode tcode);
+
     /**
      * 添加短信验证码
      * @param tcode
-     * @return
+     * @return int
      */
      int insert(Tcode tcode);
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @Description
- * @Author:Mr.Zheng
+ * @author:Mr.Zheng
  * @Date:
  */
 @Controller
@@ -77,7 +77,7 @@ public class TapplicationController {
      */
     @RequestMapping(value="/findApplicationByPage",method = RequestMethod.POST)
     @ResponseBody
-    public ResultMessage findApplicationByPage(@RequestBody Tapplication application , int page , int rows){
+    public ResultMessage findApplicationByPage(@RequestBody ApplicationDto application , int page , int rows){
         PageBean<Tapplication> pageBean = tapplicationService.findApplicationByPage(application ,page , rows);
 
         return new ResultMessage(true,"查询成功",pageBean);

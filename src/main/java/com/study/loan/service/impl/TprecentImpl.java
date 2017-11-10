@@ -19,14 +19,18 @@ import java.util.List;
 public class TprecentImpl implements TprecentService {
     @Resource
     private TprecentDao tprecentDao;
+
+    @Override
     public int insert(Tprecent tprecent) {
         return tprecentDao.insert(tprecent);
     }
 
+    @Override
     public int update(Tprecent tprecent) {
         return tprecentDao.update(tprecent);
     }
 
+    @Override
     public PageBean<Tprecent> findrTprecentByPage(int pageSize, int pageNumber) {
         int countTpre = tprecentDao.countByPage();
         PageBean pageBean = new PageBean(pageSize,pageNumber);
@@ -37,6 +41,7 @@ public class TprecentImpl implements TprecentService {
         return pageBean;
     }
 
+    @Override
     public List<Tprecent> findList() {
         return tprecentDao.findList();
     }

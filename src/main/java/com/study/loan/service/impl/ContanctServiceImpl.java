@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 public class ContanctServiceImpl implements ContactService {
     @Resource
    private ContactDao contactDao;
-
+    @Override
     public int insert(Contact contact) {
         return contactDao.insert(contact);
     }

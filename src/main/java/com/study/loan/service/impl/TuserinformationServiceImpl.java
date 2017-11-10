@@ -17,6 +17,7 @@ public class TuserinformationServiceImpl implements TuserinformationService {
     @Resource
     private TuserinformationDao tuserinformationDao;
 
+    @Override
     public int insert(Tuserinformation tuserinformation) {
         return tuserinformationDao.insert(tuserinformation);
     }

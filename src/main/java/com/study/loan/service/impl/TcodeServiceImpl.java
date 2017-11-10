@@ -11,10 +11,13 @@ import javax.annotation.Resource;
 public class TcodeServiceImpl implements TcodeService {
     @Resource
     private TcodeDao  tcodeDao;
+
+    @Override
     public Tcode findTcode(Tcode tcode) {
         return tcodeDao.findTcode(tcode);
     }
 
+    @Override
     public int insert(Tcode tcode) {
         return tcodeDao.insert(tcode);
     }

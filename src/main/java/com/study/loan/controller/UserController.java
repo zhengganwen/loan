@@ -10,16 +10,16 @@ import com.study.loan.util.MD5Util;
 import com.study.loan.util.ranDom;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 /**
- * @Description
- * @Author:Mr.Zheng
+ * @Description UserController
+ * @author:Mr.Zheng
  * @Date:2017.10.28
  */
 
@@ -31,27 +31,52 @@ public class UserController {
     @Resource
     private TcodeService tcodeService;
 
-
-    @RequestMapping("/userList")
-    public  String userList(){
-        return "userList";
-    }
     /**
      *
-     * @param user 用户登录,参数(userphone,userpwd)
-     * @return
+     * @param user
+     * @param session
+     * @return ResultMessage
      */
     @RequestMapping(value="/dologin",method=RequestMethod.POST)
     @ResponseBody
-    public ResultMessage  dalogin(@RequestBody User user){
+    public ResultMessage  dalogin(@RequestBody User user, HttpSession session){
         //密码Md5校验
         user.setUserpwd(MD5Util.pwdDigest(user.getUserpwd()));
-        User loginUser = userService.findUser(user);
+        User loginUser = userService.findUser(user,session);
         if(loginUser!=null){
             return new ResultMessage(true,"登录成功",loginUser);
         }else{
             return new ResultMessage(false,"登录失败");
         }
+    }
+
+    /**
+     * 注册生成手机验证码
+     * @param  userphone
+     * @return
+     */
+    @RequestMapping(value="/getCard",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultMessage getCard(@RequestParam String userphone ){
+        //判断手机号是否注册过
+        User  user =User.builder().userphone(userphone).build();
+        List<User> list = userService.find(user);
+        if(list.size() >0 ){
+            return new  ResultMessage(false,"您的手机号码已注册");
+        }else{
+            //生成手机验证码
+            String random = ranDom.getRandom();
+
+            //调用短信接口
+
+
+            //手机验证码插入数据库
+            Tcode tcode  = Tcode.builder().id(uuid.getInstance()).userphone(userphone).vercode(random).build();
+            //插入数据库操作
+            int i =tcodeService.insert(tcode);
+            return new  ResultMessage(true,"手机验证码已发送");
+        }
+
     }
 
     /**
@@ -61,7 +86,7 @@ public class UserController {
      */
     @RequestMapping(value="/register",method = RequestMethod.POST)
     @ResponseBody
-    public ResultMessage   sign(@RequestBody UserDto userDto) throws Exception {
+    public ResultMessage   sign(@RequestBody UserDto userDto){
 
             //进行手机验证码验证
             Tcode tcode  =Tcode.builder().userphone(userDto.getUserphone()).vercode(userDto.getVercode()).build();
@@ -69,8 +94,10 @@ public class UserController {
             if(tTcode==null){
                 return new ResultMessage(false,"手机验证码错误");
             }else{
-                String time = Config.CompareDate(); //比较的时间
-                Date intime = tTcode.getIntime();  //数据库插入验证码的时间
+                //比较的时间
+                String time = Config.CompareDate();
+                //数据库插入验证码的时间
+                Date intime = tTcode.getIntime();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 //获取String类型的时间
                 String createdate = sdf.format(intime);
@@ -89,14 +116,32 @@ public class UserController {
     }
 
     /**
+     * 重置密码生成手机验证码
+     * @param userphone
+     * @return
+     */
+    @RequestMapping(value="/resCard",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultMessage resCard(@RequestParam String userphone){
+
+        //生成手机验证码
+        String random = ranDom.getRandom();
+        //调用短信接口
+
+        Tcode tcode  =Tcode.builder().id(uuid.getInstance()).userphone(userphone).vercode(random).build();
+        //插入数据库操作
+        int i =tcodeService.insert(tcode);
+        return new  ResultMessage(true,"手机验证码已发送");
+    }
+
+    /**
      * 重置密码
      * @param userDto(userphone,userpwd,vercode)
      * @return
-     * @throws Exception
      */
     @RequestMapping("/changePwd")
     @ResponseBody
-    public ResultMessage changePwd(@RequestBody UserDto userDto) throws Exception {
+    public ResultMessage changePwd(@RequestBody UserDto userDto){
 
         //接受前台手机验证码
         Tcode tcode  = Tcode.builder().userphone(userDto.getUserphone()).vercode(userDto.getVercode()).build();
@@ -104,8 +149,10 @@ public class UserController {
         if(tTcode==null){
             return new ResultMessage(false,"手机验证码错误");
         }else{
-            String time = Config.CompareDate(); //比较的时间
-            Date intime = tTcode.getIntime();  //数据库插入验证码的时间
+            //比较的时间
+            String time = Config.CompareDate();
+            //数据库插入验证码的时间
+            Date intime = tTcode.getIntime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             //获取String类型的时间
             String createdate = sdf.format(intime);
@@ -130,74 +177,31 @@ public class UserController {
     }
 
     /**
-     * 注册生成手机验证码
-     * @param userphone
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value="/getCard",method = RequestMethod.POST)
-    @ResponseBody
-    public ResultMessage getCard(@RequestParam String userphone ) throws IOException {
-        //判断手机号是否注册过
-        User  user =User.builder().userphone(userphone).build();
-        List<User> list = userService.find(user);
-        if(list.size() >0 ){
-            return new  ResultMessage(false,"您的手机号码已注册");
-        }else{
-            //生成手机验证码
-            String random = ranDom.getRandom();
-
-            //调用短信接口
-
-
-            //手机验证码插入数据库
-            Tcode tcode  = Tcode.builder().id(uuid.getInstance()).userphone(userphone).vercode(random).build();
-            int i =tcodeService.insert(tcode);   //插入数据库操作
-            return new  ResultMessage(true,"手机验证码已发送");
-        }
-
-    }
-
-    /**
-     * 重置密码生成手机验证码
-     * @param userphone
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value="/resCard",method = RequestMethod.POST)
-    @ResponseBody
-    public ResultMessage resCard(@RequestParam String userphone){
-
-        //生成手机验证码
-        String random = ranDom.getRandom();
-        //调用短信接口
-
-        Tcode tcode  =Tcode.builder().id(uuid.getInstance()).userphone(userphone).vercode(random).build();
-        int i =tcodeService.insert(tcode);   //插入数据库操作
-        return new  ResultMessage(false,"手机验证码已发送");
-    }
-
-    /**
      * 实名认证
-     * @param user(id,username,usercardnumber,frontpicture,backpicture,truepicture)
+     * @param request
+     * @param user
      * @return
      */
     @RequestMapping(value="/trueName",method = RequestMethod.POST)
     @ResponseBody
-    public ResultMessage trueName(@RequestBody User user){
+    public ResultMessage trueName(HttpServletRequest request, @RequestBody User user){
         //调用实名认证接口
+
+        //从session获取到用户id
+        User loginUser = (User) request.getSession().getAttribute("loginUser");
+        user.setId(loginUser.getId());
         user.setState(Config.user_state_Y);
+
         int  i = userService.update(user);
         if(i==0){
             return new  ResultMessage(false,"请重新提交实名认证");
         }else{
             return new  ResultMessage(false,"实名认证已提交，等待审批");
         }
-
     }
 
     /**
-     * web端用户分页查询
+     * web端分页查询
      * @param user
      * @param page
      * @param rows
@@ -207,12 +211,12 @@ public class UserController {
     @ResponseBody
     public ResultMessage findUserByPage(@RequestBody User user ,int page ,int rows){
         PageBean<User>  pageBean = userService.findUserByPage(user ,page , rows);
-
        return new ResultMessage(true,"查询成功",pageBean);
     }
 
     /**
      * 更换手机号
+     * @param userDto
      * @return
      */
     @RequestMapping(value="/changePhone",method = RequestMethod.POST)
@@ -224,8 +228,10 @@ public class UserController {
         if(tTcode==null){
             return new ResultMessage(false,"手机验证码错误");
         }else{
-            String time = Config.CompareDate(); //比较的时间
-            Date intime = tTcode.getIntime();  //数据库插入验证码的时间
+            //比较的时间
+            String time = Config.CompareDate();
+            //数据库插入验证码的时间
+            Date intime = tTcode.getIntime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             //获取String类型的时间
             String createdate = sdf.format(intime);

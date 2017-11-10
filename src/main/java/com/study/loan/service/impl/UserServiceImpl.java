@@ -8,9 +8,11 @@ import com.study.loan.pojo.User;
 import com.study.loan.service.UserService;
 import com.study.loan.util.PictureUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -18,18 +20,25 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDao userDao;
+
+    @Override
     public int insert(User user) {
         return userDao.insert(user);
     }
 
+    @Override
     public List<User> find(User user) {
         return userDao.find(user);
     }
 
-    public User findUser(User user) {
-        return userDao.findUser(user);
+    @Override
+    public User findUser(User user, HttpSession session) {
+        User loginUser = userDao.findUser(user);
+        session.setAttribute("loginUser",loginUser);
+        return loginUser;
     }
 
+    @Override
     public int update(User user) {
         if(user.getFrontpicture()!=null){
             //身份证正面
@@ -60,7 +69,8 @@ public class UserServiceImpl implements UserService {
         return userDao.update(user);
     }
 
-    public PageBean<User> findUserByPage(User user, @RequestParam("page") int pageSize,  @RequestParam("rows")int pageNumber) {
+    @Override
+    public PageBean<User> findUserByPage(@RequestBody User user, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber) {
         User userParam = user ==null ?new User():user;
         int countUser = userDao.countByPage(userParam);
         PageBean pageBean = new PageBean(pageSize,pageNumber);
