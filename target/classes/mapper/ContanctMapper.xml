@@ -23,7 +23,6 @@
       <if test="uphone != null and uphone != ''">#{uphone},</if>
       <if test="relation != null and relation != ''">#{relation},</if>
       <if test="intime != null and intime != ''">#{intime},</if>
-
     </trim>
     )
   </insert>

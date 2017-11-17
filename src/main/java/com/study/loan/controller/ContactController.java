@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * @author Mr.Zheng
  * @Description ContactController
- * @Date 2017/9/18
+ * @Date 2017/11/12
  */
 @RestController
 @RequestMapping("/contact")
@@ -36,6 +36,17 @@ public class ContactController {
             return new ResultMessage(false,"添加失败");
         }
     }
+
+    /**
+     * 更新
+     * @param  contact
+     * @return ResultMessage
+     */
+    public ResultMessage update(@RequestBody Contact contact){
+        return null;
+    }
+
+
 
 
 }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -26,13 +28,22 @@ public class TprecentController {
     private TprecentService tprecentService;
 
     /**
+     * 利率表
+     * @return
+     */
+    @RequestMapping("/precentList")
+    public String precentList(){
+        return "precentList";
+    }
+
+    /**
      * 新增利率
      * @param tprecent
      * @return
      */
     @RequestMapping(value="/insert",method= RequestMethod.POST)
     @ResponseBody
-    public ResultMessage insert(@RequestBody Tprecent tprecent){
+    public ResultMessage insert(Tprecent tprecent){
         tprecent.setId(uuid.getInstance());
         int i = tprecentService.insert(tprecent);
         if(i==1){
@@ -49,7 +60,7 @@ public class TprecentController {
      */
     @RequestMapping(value="/update",method= RequestMethod.POST)
     @ResponseBody
-    public ResultMessage  update(@RequestBody Tprecent tprecent){
+    public ResultMessage  update(Tprecent tprecent){
         int i =tprecentService.update(tprecent);
         if(i==1){
             return new ResultMessage(true,"更新成功");
@@ -65,9 +76,12 @@ public class TprecentController {
      */
     @RequestMapping(value="/findPreByPage",method = RequestMethod.POST)
     @ResponseBody
-    public ResultMessage findPreByPage( int page , int rows){
+    public Map findPreByPage( int page , int rows){
         PageBean<Tprecent> pageBean = tprecentService.findrTprecentByPage(page,rows);
-        return  new ResultMessage(true,"查询成功",pageBean);
+        Map map =new HashMap();
+        map.put("total",pageBean.getTotalSize());
+        map.put("rows",pageBean.getDataList());
+        return  map;
     }
 
     /**
@@ -79,6 +93,18 @@ public class TprecentController {
     public  ResultMessage findList(){
         List<Tprecent> list =tprecentService.findList();
        return new ResultMessage(true,"查询成功",list) ;
+    }
+
+    /**
+     * 删除利率
+     * @param id
+     * @return
+     */
+    @RequestMapping("/delete")
+    @ResponseBody
+    public ResultMessage delete(String id){
+        int i = tprecentService.delete(id);
+        return  new ResultMessage(true,"删除成功");
     }
 
 

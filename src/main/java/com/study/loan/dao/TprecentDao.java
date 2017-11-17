@@ -46,4 +46,11 @@ public interface TprecentDao {
      */
     List<Tprecent> findList();
 
+    /**
+     * 删除利率
+     * @param id
+     * @return
+     */
+    int delete(String id);
+
 }

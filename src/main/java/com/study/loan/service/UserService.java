@@ -44,5 +44,5 @@ public interface UserService {
       * @param pageNumber
       * @return
       */
-     PageBean<User>  findUserByPage(@RequestBody User user, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber);
+     PageBean<User>  findUserByPage(User user, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber);
 }

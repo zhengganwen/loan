@@ -7,6 +7,7 @@ import com.study.loan.dto.ApplicationDto;
 import com.study.loan.pojo.Tprecent;
 import com.study.loan.service.TapplicationService;
 import com.study.loan.service.TprecentService;
+import org.apache.poi.ss.formula.ptg.MemAreaPtg;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.study.loan.pojo.Tapplication;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -29,6 +32,15 @@ public class TapplicationController {
     private TapplicationService tapplicationService;
     @Resource
     private TprecentService tprecentService;
+
+    /**
+     * 用户申请
+     * @return
+     */
+    @RequestMapping("/applicationList")
+    public String userList(){
+        return "applicationList";
+    }
 
     /**
      * 借款记录添加
@@ -59,7 +71,7 @@ public class TapplicationController {
      */
     @RequestMapping(value="/update",method= RequestMethod.POST)
     @ResponseBody
-    public ResultMessage  update(@RequestBody Tapplication application){
+    public ResultMessage  update(Tapplication application){
         int  i = tapplicationService.update(application);
         if(i==0){
             return new  ResultMessage(false,"更新失败");
@@ -77,10 +89,23 @@ public class TapplicationController {
      */
     @RequestMapping(value="/findApplicationByPage",method = RequestMethod.POST)
     @ResponseBody
-    public ResultMessage findApplicationByPage(@RequestBody ApplicationDto application , int page , int rows){
+    public Map findApplicationByPage(ApplicationDto application , int page , int rows){
         PageBean<Tapplication> pageBean = tapplicationService.findApplicationByPage(application ,page , rows);
+        Map dataMap = new HashMap();
+        List<Tapplication> list = pageBean.getDataList();
+        for (Tapplication app : list) {
+            if(app.getState().equals("1")){
+                app.setState("已申请");
+            }else if(app.getState().equals("2")){
+                app.setState("已借款");
+            }else if(app.getState().equals("3")){
+                app.setState("已还款");
+            }
 
-        return new ResultMessage(true,"查询成功",pageBean);
+        }
+        dataMap.put("rows",list);
+        dataMap.put("total",pageBean.getTotalSize());
+        return dataMap;
     }
 
 

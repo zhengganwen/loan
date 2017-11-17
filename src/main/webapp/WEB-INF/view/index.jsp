@@ -44,7 +44,17 @@
 
                 <p align="center"  data-options="iconCls:'icon-ok'">
                     <img  src="js/easyui/themes/icons/man.png">
-                    <a class="creat_tab" href="" style="color:black ">借贷列表</a>
+                    <a class="creat_tab" href="precent/precentList" style="color:black ">利率表</a>
+                </p>
+
+                <p align="center"  data-options="iconCls:'icon-ok'">
+                    <img  src="js/easyui/themes/icons/man.png">
+                    <a class="creat_tab" href="application/applicationList" style="color:black ">用户申请表</a>
+                </p>
+
+                <p align="center"  data-options="iconCls:'icon-ok'">
+                    <img  src="js/easyui/themes/icons/man.png">
+                    <a class="creat_tab" href="picture/pictureList" style="color:black ">照片表</a>
                 </p>
             </div>
 

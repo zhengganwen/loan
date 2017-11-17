@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageBean<User> findUserByPage(@RequestBody User user, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber) {
+    public PageBean<User> findUserByPage(User user, @RequestParam("page") int pageSize, @RequestParam("rows")int pageNumber) {
         User userParam = user ==null ?new User():user;
         int countUser = userDao.countByPage(userParam);
         PageBean pageBean = new PageBean(pageSize,pageNumber);

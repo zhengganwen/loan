@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 /**
  * @Description UserController
  * @author:Mr.Zheng
@@ -30,6 +33,16 @@ public class UserController {
     private UserService userService;
     @Resource
     private TcodeService tcodeService;
+
+    /**
+     * 用户页面
+     * @return
+     */
+    @RequestMapping("/userList")
+    public String userList(){
+        return "userList";
+    }
+
 
     /**
      *
@@ -70,6 +83,7 @@ public class UserController {
             //调用短信接口
 
 
+
             //手机验证码插入数据库
             Tcode tcode  = Tcode.builder().id(uuid.getInstance()).userphone(userphone).vercode(random).build();
             //插入数据库操作
@@ -87,6 +101,7 @@ public class UserController {
     @RequestMapping(value="/register",method = RequestMethod.POST)
     @ResponseBody
     public ResultMessage   sign(@RequestBody UserDto userDto){
+
 
             //进行手机验证码验证
             Tcode tcode  =Tcode.builder().userphone(userDto.getUserphone()).vercode(userDto.getVercode()).build();
@@ -200,19 +215,6 @@ public class UserController {
         }
     }
 
-    /**
-     * web端分页查询
-     * @param user
-     * @param page
-     * @param rows
-     * @return
-     */
-    @RequestMapping(value="/findUserByPage",method = RequestMethod.POST)
-    @ResponseBody
-    public ResultMessage findUserByPage(@RequestBody User user ,int page ,int rows){
-        PageBean<User>  pageBean = userService.findUserByPage(user ,page , rows);
-       return new ResultMessage(true,"查询成功",pageBean);
-    }
 
     /**
      * 更换手机号
@@ -249,6 +251,47 @@ public class UserController {
             }
 
         }
+    }
+
+    /**
+     * web端分页查询
+     * @param user
+     * @param page
+     * @param rows
+     * @return map
+     */
+    @RequestMapping(value="/findUserByPage",method = RequestMethod.POST)
+    @ResponseBody
+    public Map findUserByPage(User user , int page , int rows){
+        PageBean<User>  pageBean = userService.findUserByPage(user ,page , rows);
+        Map dataMap = new HashMap();
+        List<User> list =pageBean.getDataList();
+        for (User u:list) {
+            if(u.getState().equals("1")){
+                u.setState("用户已注册");
+            }else if(u.getState().equals("2")){
+                u.setState("用户已实名认证");
+            }else if(u.getState().equals("3")){
+                u.setState("用户已实名认证通过");
+            }else if(u.getState().equals("4")){
+                u.setState("用户已实名认证失败");
+            }
+        }
+        dataMap.put("rows",list);
+        dataMap.put("total",pageBean.getTotalSize());
+
+       return dataMap;
+    }
+
+    /**
+     * web对用户进行审批
+     * @param user
+     * @return
+     */
+    @RequestMapping("/updateState")
+    public ResultMessage updateState(User user){
+        int  i = userService.update(user);
+        return new ResultMessage(true,"更新成功");
     }
 
 

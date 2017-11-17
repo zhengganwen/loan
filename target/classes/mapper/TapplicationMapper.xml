@@ -64,7 +64,6 @@
       <if test="userphone != null and userphone != ''">and userphone like "%" #{userphone} "%"</if>
     </where>
     ) tu
-
   </select>
 
   <resultMap type="Tapplication" id="Application_user_result" autoMapping="true">

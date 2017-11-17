@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.loan.dao.PictureDao">
+    <sql id="column">id,href,path,intime</sql>
+
+    <insert id="insert" parameterType="Picture">
+        insert into picture (
+        <trim suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="href != null and href != ''">href,</if>
+            <if test="path != null and path != ''">path,</if>
+            <if test="intime != null and intime != ''">intime,</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="href != null and href != ''">#{href},</if>
+            <if test="path != null and path != ''">#{path},</if>
+            <if test="intime != null and intime != ''">#{intime},</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="update" parameterType="Picture">
+        update picture
+        <trim prefix=" set " suffixOverrides=",">
+            <if test="href != null and href != ''">href=#{href},</if>
+            <if test="path != null and path != ''">path=#{path},</if>
+            <if test="intime != null and intime != ''">intime=#{intime},</if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        delete from picture where id=#{id}
+    </delete>
+
+    <select id="findPictureList" resultType="Picture">
+        select <include refid="column"/> from picture
+    </select>
+
+
+
+</mapper>

@@ -54,4 +54,8 @@
     SELECT <include refid="column" /> FROM  tprecent
   </select>
 
+  <delete id="delete" parameterType="String">
+    delete from tprecent where id=#{id}
+  </delete>
+
 </mapper>

@@ -17,6 +17,8 @@ import java.util.List;
  */
 @Service
 public class TprecentImpl implements TprecentService {
+
+
     @Resource
     private TprecentDao tprecentDao;
 
@@ -44,6 +46,11 @@ public class TprecentImpl implements TprecentService {
     @Override
     public List<Tprecent> findList() {
         return tprecentDao.findList();
+    }
+
+    @Override
+    public int delete(String id) {
+        return tprecentDao.delete(id);
     }
 
 
